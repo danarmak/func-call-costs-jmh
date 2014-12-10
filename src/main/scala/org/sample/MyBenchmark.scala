@@ -14,10 +14,10 @@ import ExecutionContext.Implicits.global
 
 @State(Scope.Benchmark)
 class MyBenchmark {
-  val counter = new AtomicLong()
+  var counter = 0L
   val rounds = 100000000
 
-  def meth(): Unit = counter.incrementAndGet()
+  def meth(): Unit = counter += 1
 
   def makeFunc() : Unit => Unit = _ => meth()
 
@@ -35,7 +35,7 @@ class MyBenchmark {
   def manyManuallyInlined(): Any = {
     var i = 0
     while (i < rounds) {
-      counter.incrementAndGet()
+      counter += 1
       i += 1
     }
   }
@@ -151,7 +151,7 @@ class MyBenchmark {
 
   @Benchmark
   def oneManuallyInlined(): Any = {
-    counter.incrementAndGet()
+    counter += 1
   }
 
   @Benchmark
