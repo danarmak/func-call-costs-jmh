@@ -12,8 +12,22 @@ import scala.util.{Failure, Success, Try}
 
 import ExecutionContext.Implicits.global
 
+@State(Scope.Benchmark)
 class MyBenchmark {
-  import MyBenchmark._
+  val counter = new AtomicLong()
+  val rounds = 100000000
+
+  def meth(): Unit = counter.incrementAndGet()
+
+  def makeFunc() : Unit => Unit = _ => meth()
+
+  val func = makeFunc()
+
+  val funcs = (0 to 100) map (_ => makeFunc())
+
+  var funcIndex = 0
+
+  var fastFuture = FastFuture.successful(())
 
   // Benchmarks suitable for average-time mode. Each iteration does `rounds` rounds.
 
@@ -198,22 +212,6 @@ class MyBenchmark {
     }
   }
 
-}
-
-object MyBenchmark {
-  final val rounds = 100000000
-
-  final val counter = new AtomicLong()
-
-  def meth(): Unit = counter.incrementAndGet()
-  def makeFunc() : Unit => Unit = _ => meth()
-
-  final val func = makeFunc()
-  final val funcs = (0 to 100) map (_ => makeFunc())
-
-  final var funcIndex = 0
-
-  final var fastFuture = FastFuture.successful(())
 }
 
 /**
