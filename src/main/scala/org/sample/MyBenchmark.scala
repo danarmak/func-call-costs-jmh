@@ -181,24 +181,21 @@ class MyBenchmark {
   @Benchmark
   def oneMapFastFuture(): Any = {
     fastFuture = new FastFuture(fastFuture).map {
-      case _ =>
-        FastFuture.successful(meth())
+      case _ => meth()
     }
   }
 
   @Benchmark
   def oneMapFastFutureFunc(): Any = {
     fastFuture = new FastFuture(fastFuture).map {
-      case _ =>
-        FastFuture.successful(func())
+      case _ => func()
     }
   }
 
   @Benchmark
   def oneMapFastFutureFirstFunc(): Any = {
     fastFuture = new FastFuture(fastFuture).map {
-      case _ =>
-        FastFuture.successful(funcs(0)())
+      case _ => funcs(0)()
     }
   }
 
@@ -206,7 +203,7 @@ class MyBenchmark {
   def oneMapFastFutureSomeFunc(): Any = {
     fastFuture = new FastFuture(fastFuture).map {
       case _ =>
-        FastFuture.successful(funcs(funcIndex)())
+        funcs(funcIndex)()
         funcIndex += 1
         if (funcIndex == funcs.size) funcIndex = 0
     }
